@@ -1,0 +1,20 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Binary & Cache
+cloudflared.exe
+*.log
+.DS_Store
+Thumbs.db
+
+# Test scripts
+test_universal.py
