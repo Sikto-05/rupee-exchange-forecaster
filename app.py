@@ -15,6 +15,7 @@ from flask_cors import CORS
 
 import data_manager
 import forecaster
+import geopolitical_news
 
 logging.basicConfig(
     level=logging.INFO,
@@ -43,6 +44,16 @@ def index():
 @app.route("/api/currencies", methods=["GET"])
 def currencies():
     return jsonify({"currencies": data_manager.get_currencies_list()})
+
+
+@app.route("/api/geopolitical-news", methods=["GET"])
+def geopolitical_news_feed():
+    """Returns real-time world politics landscape and currency drivers."""
+    return jsonify({
+        "status": "success",
+        "global_landscape": geopolitical_news.get_geopolitical_summary(),
+        "drivers": geopolitical_news.CURRENCY_GEOPOLITICAL_DRIVERS,
+    })
 
 
 @app.route("/api/dollar-prediction", methods=["GET"])
@@ -105,6 +116,7 @@ def calculate():
             "forecasts": forecast_results,
             "currencies_count": len(forecast_results),
             "historical_data_years": 10,
+            "global_geopolitics": geopolitical_news.get_geopolitical_summary(),
         })
     except Exception as exc:
         logger.exception("Calculation error")

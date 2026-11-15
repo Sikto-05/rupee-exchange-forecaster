@@ -17,13 +17,15 @@ from sklearn.linear_model import Ridge
 from sklearn.preprocessing import StandardScaler
 
 import data_manager
+import geopolitical_news
 
 logger = logging.getLogger(__name__)
 
 
 class CurrencyForecaster:
     """
-    Trained on 10 years of historical cross-rate dynamics.
+    Trained on 10 years of historical cross-rate dynamics and augmented
+    with real-time geopolitical intelligence and global news sentiment.
     Forecasts percentage changes (returns) over a 3-4 day horizon
     and applies them to today's anchor rate.
     """
@@ -37,6 +39,7 @@ class CurrencyForecaster:
         self.daily_volatility = 0.0
         self.trend = "neutral"
         self.recent_ewma_momentum = 0.0
+        self.geo_info = geopolitical_news.get_currency_driver(currency_code)
 
     def train_on_history(self, series: pd.Series):
         """
@@ -121,14 +124,20 @@ class CurrencyForecaster:
                     "lower": round(float(current_rate), 4),
                     "predicted_change_pct": 0.0,
                     "change_inr": 0.0,
+                    "geopolitical_impact": self.geo_info.get("impact_bias", "Strict Peg"),
+                    "geopolitical_headline": self.geo_info.get("headline", ""),
                 })
             return predictions
 
         predictions = []
         running_rate = current_rate
-        daily_vol = max(self.daily_volatility, 0.0035)
 
-        base_drift = np.clip(self.recent_ewma_momentum * 0.0005, -0.003, 0.003)
+        # Geopolitical news drift integration
+        geo_drift = float(self.geo_info.get("daily_geo_drift", 0.0))
+        geo_mult = float(self.geo_info.get("geo_volatility_mult", 1.0))
+        daily_vol = max(self.daily_volatility, 0.0035) * geo_mult
+
+        base_drift = np.clip(self.recent_ewma_momentum * 0.0005 + geo_drift, -0.004, 0.004)
 
         curr_date = start_date
         for step in range(1, days + 1):
@@ -156,6 +165,8 @@ class CurrencyForecaster:
                 "lower": round(float(max(running_rate - margin, 0.0001)), 4),
                 "predicted_change_pct": round(float((running_rate - current_rate) / current_rate * 100), 2),
                 "change_inr": round(float(running_rate - current_rate), 4),
+                "geopolitical_impact": self.geo_info.get("impact_bias", "Neutral"),
+                "geopolitical_headline": self.geo_info.get("headline", ""),
             })
 
         return predictions
@@ -201,10 +212,15 @@ def predict_dollar_rate(
     trend_desc = "bullish momentum" if forecaster.trend == "bullish" else (
         "bearish softening bias" if forecaster.trend == "bearish" else "steady consolidation range"
     )
+    geo_driver = geopolitical_news.get_currency_driver("USD")
+    global_geo = geopolitical_news.get_geopolitical_summary()
+
     analysis_summary = (
         f"Over 10 years of analysis (2,600+ trading sessions), USD/INR displays a long-term CAGR of "
-        f"+{cagr_10yr:.1f}% with an annualized volatility of {vol_10yr:.1f}%. The 4-day model projects USD/INR to trade between "
-        f"₹{min(p['lower'] for p in predictions):.2f} and ₹{max(p['upper'] for p in predictions):.2f}."
+        f"+{cagr_10yr:.1f}% with an annualized volatility of {vol_10yr:.1f}%. "
+        f"Factoring in current world politics and news ({geo_driver['headline']}), "
+        f"the 4-day forecast projects USD/INR to trade within a 90% corridor of "
+        f"₹{min(p['lower'] for p in predictions):.2f} to ₹{max(p['upper'] for p in predictions):.2f}."
     )
 
     return {
@@ -221,6 +237,8 @@ def predict_dollar_rate(
         "forecasts": predictions,
         "analysis_summary": analysis_summary,
         "total_historical_days": len(series),
+        "geopolitical_analysis": geo_driver,
+        "global_geopolitics": global_geo,
     }
 
 
@@ -231,7 +249,8 @@ def forecast_all_currencies(
 ) -> dict:
     """
     Calculates cross-rates and forecasts for all supported currencies
-    (India's neighbours + global vehicle pairs) based directly on the inputted USD/INR rate.
+    (India's neighbours + global vehicle pairs) based directly on the inputted USD/INR rate
+    and current world politics / news drivers.
     """
     cross_rates = data_manager.get_cross_rates(usd_inr_rate, historical_df)
     results = {}
@@ -253,6 +272,7 @@ def forecast_all_currencies(
         forecaster.train_on_history(series)
 
         forecast_list = forecaster.forecast_from_rate(curr_rate, days=days)
+        geo_info = geopolitical_news.get_currency_driver(code)
 
         results[code] = {
             "current_rate": curr_rate,
@@ -263,6 +283,7 @@ def forecast_all_currencies(
             "volatility_label": forecaster.volatility_label,
             "forecasts": forecast_list,
             "meta": meta,
+            "geopolitical_driver": geo_info,
         }
 
     return results
