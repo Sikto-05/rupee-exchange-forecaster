@@ -5,8 +5,7 @@ Ensemble time-series forecasting model combining:
 1. Feature-Engineered Ridge Regression (Lags, Moving Averages, Momentum, DOW)
 2. Exponentially Weighted Moving Average (EWMA) Momentum Tracking
 3. Historical Volatility Confidence Bands (t + 1..4 days)
-Includes specialized 10-year Dollar (USD/INR) trajectory prediction engine
-and multi-currency cross-rate projection pipelines.
+Forecasting pipelines for India's neighbouring currencies and global vehicle pairs.
 """
 
 import logging
@@ -42,20 +41,21 @@ class CurrencyForecaster:
     def train_on_history(self, series: pd.Series):
         """
         Train ML model on 10 years of historical rates for this currency.
-        Features engineered:
-          - Multiple autoregressive return lags (1, 2, 3, 5, 10 days)
-          - Moving-average deviations (MA5, MA20, MA50)
-          - Normalized momentum and volatility
-          - Day-of-week seasonality
         """
         series = series.dropna()
         if len(series) < 60:
             return
 
+        # Check if constant peg
+        if series.std() < 1e-6:
+            self.is_trained = True
+            self.annual_volatility = 0.0
+            self.daily_volatility = 0.0
+            self.trend = "neutral"
+            return
+
         # Calculate daily returns
         returns = series.pct_change().dropna()
-
-        # Build feature DataFrame
         df_feat = pd.DataFrame({"target_return": returns})
 
         for lag in [1, 2, 3, 5, 7, 10]:
@@ -69,8 +69,6 @@ class CurrencyForecaster:
 
         # 10-day rolling volatility
         df_feat["rolling_vol"] = returns.rolling(10).std().shift(1)
-
-        # Day of week
         df_feat["dow"] = df_feat.index.dayofweek
 
         df_feat.dropna(inplace=True)
@@ -85,12 +83,10 @@ class CurrencyForecaster:
         self.model.fit(X_scaled, y)
         self.is_trained = True
 
-        # Compute volatility metrics (annualised)
         recent_returns = returns.iloc[-30:]
         self.daily_volatility = float(recent_returns.std())
         self.annual_volatility = float(self.daily_volatility * np.sqrt(252) * 100)
 
-        # Recent 10-day EWMA momentum
         ewma_recent = series.ewm(span=10).mean()
         mom = float((series.iloc[-1] - ewma_recent.iloc[-1]) / ewma_recent.iloc[-1] * 100)
         self.recent_ewma_momentum = mom
@@ -105,30 +101,44 @@ class CurrencyForecaster:
     def forecast_from_rate(self, current_rate: float, days: int = 4, start_date: datetime = None) -> list:
         """
         Generate multi-step forecasts starting from today's inputted cross-rate.
-        Ensures smooth, realistic, continuous projections with confidence intervals.
         """
         if start_date is None:
             start_date = datetime.now()
 
+        # If pegged (zero volatility), return constant rates
+        if self.daily_volatility < 1e-5:
+            predictions = []
+            curr_date = start_date
+            for step in range(1, days + 1):
+                curr_date += timedelta(days=1)
+                while curr_date.weekday() >= 5:
+                    curr_date += timedelta(days=1)
+                predictions.append({
+                    "date": curr_date.strftime("%Y-%m-%d"),
+                    "day_label": curr_date.strftime("%a, %b %d"),
+                    "rate": round(float(current_rate), 4),
+                    "upper": round(float(current_rate), 4),
+                    "lower": round(float(current_rate), 4),
+                    "predicted_change_pct": 0.0,
+                    "change_inr": 0.0,
+                })
+            return predictions
+
         predictions = []
         running_rate = current_rate
-        daily_vol = max(self.daily_volatility, 0.0035)  # reasonable minimum floor ~0.35%
+        daily_vol = max(self.daily_volatility, 0.0035)
 
-        # Calculate a gentle drift component from EWMA momentum (dampened over time)
         base_drift = np.clip(self.recent_ewma_momentum * 0.0005, -0.003, 0.003)
 
         curr_date = start_date
         for step in range(1, days + 1):
             curr_date += timedelta(days=1)
-            # Skip Saturday and Sunday for forex trading days
             while curr_date.weekday() >= 5:
                 curr_date += timedelta(days=1)
 
-            # Dampen drift over the horizon (mean-reversion)
             decay = np.exp(-0.25 * (step - 1))
             step_drift = base_drift * decay
 
-            # Small pseudo-random walk perturbation derived from seed of date+code for reproducibility
             date_hash = int(curr_date.strftime("%Y%m%d")) + sum(ord(c) for c in self.currency_code)
             np.random.seed(date_hash % 100000)
             daily_shock = np.random.normal(0, daily_vol * 0.4)
@@ -136,8 +146,7 @@ class CurrencyForecaster:
             predicted_return = step_drift + daily_shock
             running_rate = running_rate * (1.0 + predicted_return)
 
-            # Confidence bounds expand with sqrt(time)
-            margin = running_rate * (daily_vol * np.sqrt(step) * 1.645)  # 90% confidence interval
+            margin = running_rate * (daily_vol * np.sqrt(step) * 1.645)
 
             predictions.append({
                 "date": curr_date.strftime("%Y-%m-%d"),
@@ -167,12 +176,7 @@ def predict_dollar_rate(
     base_rate: float = None,
 ) -> dict:
     """
-    Dedicated 10-Year Macroeconomic Model for the US Dollar (USD/INR).
-    Analyzes 10 years of daily USD/INR trading sessions (2,600+ days)
-    to predict:
-      - Recommended/equilibrium rate for today
-      - Forward 4-day trajectory with Upper and Lower confidence limits
-      - Volatility, momentum, and long-term trend statistics
+    Analyzes 10 years of daily USD/INR trading sessions to project forward 4-day trajectory.
     """
     if "INR" not in historical_df.columns:
         raise ValueError("Historical dataset missing 'INR' (USD/INR) time series.")
@@ -180,33 +184,26 @@ def predict_dollar_rate(
     series = historical_df["INR"].dropna()
     latest_market_close = float(series.iloc[-1])
 
-    # 10-Year statistical metrics
     rets = series.pct_change().dropna()
     vol_10yr = float(rets.std() * np.sqrt(252) * 100)
     vol_30d = float(rets.iloc[-30:].std() * np.sqrt(252) * 100)
     ma_20 = float(series.rolling(20).mean().iloc[-1])
     ma_50 = float(series.rolling(50).mean().iloc[-1])
 
-    # 10-Year compound annual growth rate (CAGR)
     cagr_10yr = float(((series.iloc[-1] / series.iloc[0]) ** (1.0 / 10.0) - 1.0) * 100)
 
-    # Train model
     forecaster = CurrencyForecaster("USD")
     forecaster.train_on_history(series)
 
-    # If user provided a specific base rate, anchor to it; otherwise use latest market rate
     anchor_rate = float(base_rate) if (base_rate and base_rate > 0) else round(latest_market_close, 2)
-
     predictions = forecaster.forecast_from_rate(anchor_rate, days=days)
 
-    # Summary insight
-    trend_desc = "bullish upward momentum" if forecaster.trend == "bullish" else (
+    trend_desc = "bullish momentum" if forecaster.trend == "bullish" else (
         "bearish softening bias" if forecaster.trend == "bearish" else "steady consolidation range"
     )
     analysis_summary = (
         f"Over 10 years of analysis (2,600+ trading sessions), USD/INR displays a long-term CAGR of "
-        f"+{cagr_10yr:.1f}% with an annualized volatility of {vol_10yr:.1f}%. Current 20-day technicals "
-        f"indicate a {trend_desc}. The 4-day model projects USD/INR to trade between "
+        f"+{cagr_10yr:.1f}% with an annualized volatility of {vol_10yr:.1f}%. The 4-day model projects USD/INR to trade between "
         f"₹{min(p['lower'] for p in predictions):.2f} and ₹{max(p['upper'] for p in predictions):.2f}."
     )
 
@@ -234,7 +231,7 @@ def forecast_all_currencies(
 ) -> dict:
     """
     Calculates cross-rates and forecasts for all supported currencies
-    based directly on the user's provided USD/INR rate.
+    (India's neighbours + global vehicle pairs) based directly on the inputted USD/INR rate.
     """
     cross_rates = data_manager.get_cross_rates(usd_inr_rate, historical_df)
     results = {}
@@ -243,8 +240,11 @@ def forecast_all_currencies(
         curr_rate = info["rate"]
         meta = info["meta"]
 
-        # Build 10-year series for training
-        if code in historical_df.columns and "INR" in historical_df.columns:
+        meta_def = data_manager.CURRENCIES.get(code, {})
+        if "inr_peg" in meta_def:
+            # Pegged to INR
+            series = pd.Series([meta_def["inr_peg"]] * 100)
+        elif code in historical_df.columns and "INR" in historical_df.columns:
             series = (historical_df["INR"] / historical_df[code]).dropna()
         else:
             series = pd.Series([curr_rate] * 100)

@@ -291,35 +291,42 @@
             transform: none;
         }
 
-        .btn-ai-predict {
-            padding: 20px 32px;
-            font-family: var(--font-heading);
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #ffffff;
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(124, 77, 255, 0.3));
-            border: 1.5px solid var(--accent-cyan);
-            border-radius: var(--radius-md);
+        .curr-tab-btn {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all var(--transition-fast);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-            white-space: nowrap;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
         }
 
-        .btn-ai-predict:hover {
-            transform: translateY(-2px);
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.35), rgba(124, 77, 255, 0.45));
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.35);
-            border-color: #fff;
+        .curr-tab-btn:hover {
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.06);
         }
 
-        .btn-ai-predict:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
+        .curr-tab-btn.active {
+            background: linear-gradient(135deg, rgba(240, 185, 11, 0.2), rgba(0, 212, 255, 0.2));
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(240, 185, 11, 0.15);
+        }
+
+        .badge-neighbour {
+            background: rgba(255, 153, 0, 0.15);
+            color: #ff9900;
+            border: 1px solid rgba(255, 153, 0, 0.35);
+        }
+
+        .badge-global {
+            background: rgba(0, 212, 255, 0.12);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 212, 255, 0.25);
         }
 
         .usd-outlook-card {
@@ -1002,7 +1009,7 @@
 <section class="hero">
     <div class="container">
         <h2 class="hero-title">Forecast Global Currency Rates Against ₹</h2>
-        <p class="hero-subtitle">Enter the current USD/INR exchange rate to see real-time cross-rates and AI-powered 4-day forecasts for 13 currencies</p>
+        <p class="hero-subtitle">Enter the current USD/INR exchange rate to compute real-time cross-rates and 4-day AI forward forecasts for India's neighbours and 23 world currencies</p>
 
         <div class="input-group">
             <div class="input-wrapper">
@@ -1015,9 +1022,6 @@
             </div>
             <button class="btn-forecast" id="forecastBtn" onclick="calculateRates()">
                 ⚡ Forecast
-            </button>
-            <button class="btn-ai-predict" id="aiPredictBtn" onclick="predictDollarRate()" title="Uses 10 years of USD/INR historical dynamics to predict dollar rate and 4-day outlook">
-                ✨ AI Predict Dollar (10-Yr Model)
             </button>
         </div>
 
@@ -1039,7 +1043,7 @@
             </div>
             <div class="quick-stat">
                 <div class="label">Currencies Tracked</div>
-                <div class="value">13</div>
+                <div class="value">23</div>
             </div>
             <div class="quick-stat">
                 <div class="label">Forecast Horizon</div>
@@ -1127,8 +1131,16 @@
 
         <!-- Currency Cards -->
         <div class="section-header">
-            <h2 class="section-title">Live Cross <span>Rates</span></h2>
+            <h2 class="section-title">Live Cross <span>Rates & Forecasts</span></h2>
         </div>
+
+        <!-- Filter tabs for All, India's Neighbours, Global Majors -->
+        <div class="currency-tabs" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap;">
+            <button class="curr-tab-btn active" id="tabAll" onclick="filterCurrencyGrid('all')">🌐 All Currencies (23)</button>
+            <button class="curr-tab-btn" id="tabNeighbour" onclick="filterCurrencyGrid('neighbour')">🇮🇳 India's Neighbours (9)</button>
+            <button class="curr-tab-btn" id="tabGlobal" onclick="filterCurrencyGrid('global')">🌍 Global Majors (14)</button>
+        </div>
+
         <div class="currency-grid" id="currencyGrid"></div>
 
         <!-- Chart Section -->
@@ -1270,21 +1282,32 @@
 
     /* ── Client-Side Fallback Engine (for GitHub Pages static hosting) ── */
     const CURRENCY_METADATA = {
-        USD: { symbol: "$", name: "US Dollar", country: "United States", flag: "🇺🇸", col: "USD" },
-        EUR: { symbol: "€", name: "Euro", country: "European Union", flag: "🇪🇺", col: "EUR" },
-        GBP: { symbol: "£", name: "British Pound", country: "United Kingdom", flag: "🇬🇧", col: "GBP" },
-        JPY: { symbol: "¥", name: "Japanese Yen", country: "Japan", flag: "🇯🇵", col: "JPY" },
-        AUD: { symbol: "A$", name: "Australian Dollar", country: "Australia", flag: "🇦🇺", col: "AUD" },
-        CAD: { symbol: "C$", name: "Canadian Dollar", country: "Canada", flag: "🇨🇦", col: "CAD" },
-        CHF: { symbol: "Fr", name: "Swiss Franc", country: "Switzerland", flag: "🇨🇭", col: "CHF" },
-        SGD: { symbol: "S$", name: "Singapore Dollar", country: "Singapore", flag: "🇸🇬", col: "SGD" },
-        AED: { symbol: "د.إ", name: "UAE Dirham", country: "United Arab Emirates", flag: "🇦🇪", col: "AED" },
-        SAR: { symbol: "﷼", name: "Saudi Riyal", country: "Saudi Arabia", flag: "🇸🇦", col: "SAR" },
-        CNY: { symbol: "¥", name: "Chinese Yuan", country: "China", flag: "🇨🇳", col: "CNY" },
-        THB: { symbol: "฿", name: "Thai Baht", country: "Thailand", flag: "🇹🇭", col: "THB" },
-        MYR: { symbol: "RM", name: "Malaysian Ringgit", country: "Malaysia", flag: "🇲🇾", col: "MYR" },
-        NZD: { symbol: "NZ$", name: "New Zealand Dollar", country: "New Zealand", flag: "🇳🇿", col: "NZD" },
-        KRW: { symbol: "₩", name: "South Korean Won", country: "South Korea", flag: "🇰🇷", col: "KRW" }
+        // Immediate Neighbours of India
+        BDT: { symbol: "৳", name: "Bangladeshi Taka", country: "Bangladesh", flag: "🇧🇩", category: "neighbour" },
+        PKR: { symbol: "₨", name: "Pakistani Rupee", country: "Pakistan", flag: "🇵🇰", category: "neighbour" },
+        NPR: { symbol: "रू", name: "Nepalese Rupee", country: "Nepal", flag: "🇳🇵", category: "neighbour", inr_peg: 0.625 },
+        LKR: { symbol: "Rs", name: "Sri Lankan Rupee", country: "Sri Lanka", flag: "🇱🇰", category: "neighbour" },
+        BTN: { symbol: "Nu.", name: "Bhutanese Ngultrum", country: "Bhutan", flag: "🇧🇹", category: "neighbour", inr_peg: 1.000 },
+        MMK: { symbol: "K", name: "Myanmar Kyat", country: "Myanmar", flag: "🇲🇲", category: "neighbour" },
+        AFN: { symbol: "؋", name: "Afghan Afghani", country: "Afghanistan", flag: "🇦🇫", category: "neighbour" },
+        MVR: { symbol: "Rf", name: "Maldivian Rufiyaa", country: "Maldives", flag: "🇲🇻", category: "neighbour", usd_peg: 15.42 },
+        CNY: { symbol: "¥", name: "Chinese Yuan", country: "China", flag: "🇨🇳", category: "neighbour" },
+
+        // Major Global Currencies
+        USD: { symbol: "$", name: "US Dollar", country: "United States", flag: "🇺🇸", category: "global" },
+        EUR: { symbol: "€", name: "Euro", country: "European Union", flag: "🇪🇺", category: "global" },
+        GBP: { symbol: "£", name: "British Pound", country: "United Kingdom", flag: "🇬🇧", category: "global" },
+        JPY: { symbol: "¥", name: "Japanese Yen", country: "Japan", flag: "🇯🇵", category: "global" },
+        AED: { symbol: "د.إ", name: "UAE Dirham", country: "United Arab Emirates", flag: "🇦🇪", category: "global", usd_peg: 3.6725 },
+        SAR: { symbol: "﷼", name: "Saudi Riyal", country: "Saudi Arabia", flag: "🇸🇦", category: "global", usd_peg: 3.7500 },
+        SGD: { symbol: "S$", name: "Singapore Dollar", country: "Singapore", flag: "🇸🇬", category: "global" },
+        AUD: { symbol: "A$", name: "Australian Dollar", country: "Australia", flag: "🇦🇺", category: "global" },
+        CAD: { symbol: "C$", name: "Canadian Dollar", country: "Canada", flag: "🇨🇦", category: "global" },
+        CHF: { symbol: "Fr", name: "Swiss Franc", country: "Switzerland", flag: "🇨🇭", category: "global" },
+        THB: { symbol: "฿", name: "Thai Baht", country: "Thailand", flag: "🇹🇭", category: "global" },
+        MYR: { symbol: "RM", name: "Malaysian Ringgit", country: "Malaysia", flag: "🇲🇾", category: "global" },
+        NZD: { symbol: "NZ$", name: "New Zealand Dollar", country: "New Zealand", flag: "🇳🇿", category: "global" },
+        KRW: { symbol: "₩", name: "South Korean Won", country: "South Korea", flag: "🇰🇷", category: "global" }
     };
 
     let localCsvData = null;
@@ -1324,61 +1347,92 @@
 
         Object.keys(CURRENCY_METADATA).forEach(code => {
             const meta = CURRENCY_METADATA[code];
-            const usd_to_x = lastRow[code] || 1.0;
-            const prev_usd_to_x = prevRow[code] || usd_to_x;
-            const inr_per_x = rate / usd_to_x;
-            const prev_inr = (prevRow.INR || rate) / prev_usd_to_x;
-            const chg_pct = prev_inr > 0 ? ((inr_per_x - prev_inr) / prev_inr) * 100 : 0.0;
+            let inr_per_x, usd_to_x, chg_pct, annualVol, dailyVol, trend, volLabel;
+
+            if (meta.inr_peg !== undefined) {
+                // Official peg to INR (e.g. NPR = 0.625, BTN = 1.000)
+                inr_per_x = meta.inr_peg;
+                usd_to_x = rate / inr_per_x;
+                chg_pct = 0.0;
+                annualVol = 0.0;
+                dailyVol = 0.0;
+                trend = 'neutral';
+                volLabel = 'Pegged';
+            } else {
+                if (meta.usd_peg !== undefined) {
+                    usd_to_x = meta.usd_peg;
+                } else {
+                    usd_to_x = lastRow[code] || 1.0;
+                }
+                const prev_usd_to_x = prevRow[code] || usd_to_x;
+                inr_per_x = rate / usd_to_x;
+                const prev_inr = (prevRow.INR || rate) / prev_usd_to_x;
+                chg_pct = prev_inr > 0 ? ((inr_per_x - prev_inr) / prev_inr) * 100 : 0.0;
+
+                const recentRates = [];
+                const startIdx = Math.max(0, csv.rows.length - 35);
+                for (let i = startIdx; i < csv.rows.length; i++) {
+                    const rowUsdToX = meta.usd_peg !== undefined ? meta.usd_peg : (csv.rows[i][code] || usd_to_x);
+                    recentRates.push((csv.rows[i].INR || 84.5) / rowUsdToX);
+                }
+                const dailyReturns = [];
+                for (let i = 1; i < recentRates.length; i++) {
+                    dailyReturns.push((recentRates[i] - recentRates[i - 1]) / recentRates[i - 1]);
+                }
+                const meanRet = dailyReturns.reduce((a, b) => a + b, 0) / (dailyReturns.length || 1);
+                const variance = dailyReturns.reduce((a, b) => a + Math.pow(b - meanRet, 2), 0) / (dailyReturns.length || 1);
+                dailyVol = Math.max(Math.sqrt(variance), 0.0035);
+                annualVol = dailyVol * Math.sqrt(252) * 100;
+
+                let ewma = recentRates[0];
+                const alpha = 2 / 11;
+                for (let i = 1; i < recentRates.length; i++) {
+                    ewma = alpha * recentRates[i] + (1 - alpha) * ewma;
+                }
+                const mom = (recentRates[recentRates.length - 1] - ewma) / ewma * 100;
+                trend = mom > 0.15 ? 'bullish' : (mom < -0.15 ? 'bearish' : 'neutral');
+                volLabel = annualVol < 6 ? 'Low' : (annualVol < 14 ? 'Medium' : 'High');
+            }
 
             cross_rates[code] = { rate: inr_per_x, change_pct: chg_pct, usd_to_x, meta };
-
-            const recentRates = [];
-            const startIdx = Math.max(0, csv.rows.length - 35);
-            for (let i = startIdx; i < csv.rows.length; i++) {
-                recentRates.push((csv.rows[i].INR || 84.5) / (csv.rows[i][code] || 1.0));
-            }
-            const dailyReturns = [];
-            for (let i = 1; i < recentRates.length; i++) {
-                dailyReturns.push((recentRates[i] - recentRates[i - 1]) / recentRates[i - 1]);
-            }
-            const meanRet = dailyReturns.reduce((a, b) => a + b, 0) / dailyReturns.length;
-            const variance = dailyReturns.reduce((a, b) => a + Math.pow(b - meanRet, 2), 0) / dailyReturns.length;
-            const dailyVol = Math.max(Math.sqrt(variance), 0.0035);
-            const annualVol = dailyVol * Math.sqrt(252) * 100;
-
-            let ewma = recentRates[0];
-            const alpha = 2 / 11;
-            for (let i = 1; i < recentRates.length; i++) {
-                ewma = alpha * recentRates[i] + (1 - alpha) * ewma;
-            }
-            const mom = (recentRates[recentRates.length - 1] - ewma) / ewma * 100;
-            const trend = mom > 0.15 ? 'bullish' : (mom < -0.15 ? 'bearish' : 'neutral');
-            const volLabel = annualVol < 6 ? 'Low' : (annualVol < 14 ? 'Medium' : 'High');
 
             const forecastList = [];
             let currDate = new Date();
             let runningRate = inr_per_x;
-            const baseDrift = Math.max(-0.003, Math.min(0.003, mom * 0.0005));
 
             for (let step = 1; step <= 4; step++) {
                 currDate.setDate(currDate.getDate() + 1);
                 while (currDate.getDay() === 0 || currDate.getDay() === 6) {
                     currDate.setDate(currDate.getDate() + 1);
                 }
-                const decay = Math.exp(-0.25 * (step - 1));
-                const stepDrift = baseDrift * decay;
-                runningRate = runningRate * (1.0 + stepDrift);
-                const margin = runningRate * (dailyVol * Math.sqrt(step) * 1.645);
 
-                forecastList.push({
-                    date: currDate.toISOString().slice(0, 10),
-                    day_label: currDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
-                    rate: runningRate,
-                    upper: runningRate + margin,
-                    lower: Math.max(runningRate - margin, 0.0001),
-                    predicted_change_pct: parseFloat(((runningRate - inr_per_x) / inr_per_x * 100).toFixed(2)),
-                    change_inr: parseFloat((runningRate - inr_per_x).toFixed(4))
-                });
+                if (meta.inr_peg !== undefined) {
+                    forecastList.push({
+                        date: currDate.toISOString().slice(0, 10),
+                        day_label: currDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                        rate: inr_per_x,
+                        upper: inr_per_x,
+                        lower: inr_per_x,
+                        predicted_change_pct: 0.0,
+                        change_inr: 0.0
+                    });
+                } else {
+                    const baseDrift = Math.max(-0.003, Math.min(0.003, (trend === 'bullish' ? 0.001 : trend === 'bearish' ? -0.001 : 0)));
+                    const decay = Math.exp(-0.25 * (step - 1));
+                    const stepDrift = baseDrift * decay;
+                    runningRate = runningRate * (1.0 + stepDrift);
+                    const margin = runningRate * (dailyVol * Math.sqrt(step) * 1.645);
+
+                    forecastList.push({
+                        date: currDate.toISOString().slice(0, 10),
+                        day_label: currDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }),
+                        rate: runningRate,
+                        upper: runningRate + margin,
+                        lower: Math.max(runningRate - margin, 0.0001),
+                        predicted_change_pct: parseFloat(((runningRate - inr_per_x) / inr_per_x * 100).toFixed(2)),
+                        change_inr: parseFloat((runningRate - inr_per_x).toFixed(4))
+                    });
+                }
             }
 
             forecasts[code] = {
@@ -1469,35 +1523,6 @@
         }
     }
 
-    /* ── Predict Dollar Rate (10-Year Model) ──────────────────── */
-    async function predictDollarRate() {
-        const btn = document.getElementById('aiPredictBtn');
-        btn.disabled = true;
-        btn.textContent = '⏳ Analyzing 10 Years...';
-
-        const overlay = document.getElementById('loadingOverlay');
-        overlay.classList.add('active');
-
-        try {
-            const res = await fetch('/api/dollar-prediction');
-            if (!res.ok) throw new Error('Failed to load 10-year dollar prediction');
-            const data = await res.json();
-
-            const predictedRate = data.anchor_rate || data.latest_market_close;
-            document.getElementById('usdInrInput').value = predictedRate.toFixed(2);
-            showToast(`✨ Loaded 10-Year USD/INR AI Prediction: ₹${predictedRate.toFixed(2)}`);
-
-            // Automatically run forecast with the predicted rate
-            await calculateRates();
-        } catch (err) {
-            showToast(`Error: ${err.message}`);
-            console.error(err);
-        } finally {
-            overlay.classList.remove('active');
-            btn.disabled = false;
-            btn.textContent = '✨ AI Predict Dollar (10-Yr Model)';
-        }
-    }
 
     /* ── Render Dollar 10-Year Macro & 4-Day Outlook ──────────── */
     function renderDollarOutlook(dollarData, baseRate) {
@@ -1583,6 +1608,31 @@
         }, 400);
     }
 
+    /* ── Filter Currency Grid ────────────────────────────────── */
+    function filterCurrencyGrid(category) {
+        document.querySelectorAll('.curr-tab-btn').forEach(btn => btn.classList.remove('active'));
+        if (category === 'all') {
+            const btn = document.getElementById('tabAll');
+            if (btn) btn.classList.add('active');
+        } else if (category === 'neighbour') {
+            const btn = document.getElementById('tabNeighbour');
+            if (btn) btn.classList.add('active');
+        } else if (category === 'global') {
+            const btn = document.getElementById('tabGlobal');
+            if (btn) btn.classList.add('active');
+        }
+
+        const cards = document.querySelectorAll('.currency-card');
+        cards.forEach(card => {
+            const cardCat = card.getAttribute('data-category');
+            if (category === 'all' || cardCat === category) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
     /* ── Currency Cards ───────────────────────────────────────── */
     function renderCurrencyCards(data) {
         const grid = document.getElementById('currencyGrid');
@@ -1599,7 +1649,8 @@
 
             const card = document.createElement('div');
             card.className = 'currency-card';
-            card.style.animationDelay = `${i * 0.06}s`;
+            card.setAttribute('data-category', meta.category || 'global');
+            card.style.animationDelay = `${i * 0.05}s`;
             card.onclick = () => {
                 // Set this currency in chart
                 document.getElementById('chartCurrencySelect').value = code;
@@ -1625,13 +1676,17 @@
             const volClass = curr.volatility_label === 'Low' ? 'badge-vol-low'
                            : curr.volatility_label === 'High' ? 'badge-vol-high' : 'badge-vol-medium';
 
+            const catBadge = meta.category === 'neighbour'
+                ? '<span class="badge badge-neighbour">🇮🇳 Neighbour</span>'
+                : '<span class="badge badge-global">🌍 Global</span>';
+
             card.innerHTML = `
                 <div class="card-header">
                     <div class="card-currency">
                         <span class="card-flag">${meta.flag || ''}</span>
                         <div>
                             <div class="card-code">${code}</div>
-                            <div class="card-name">${meta.name || ''}</div>
+                            <div class="card-name">${meta.country ? meta.country + ' · ' : ''}${meta.name || ''}</div>
                         </div>
                     </div>
                     <div class="card-change ${isUp ? 'up' : 'down'}">
@@ -1643,6 +1698,7 @@
                 <canvas class="sparkline-canvas" id="spark-${code}"></canvas>
                 <div class="card-forecast">${forecastHTML}</div>
                 <div class="card-badges">
+                    ${catBadge}
                     <span class="badge ${trendClass}">${curr.trend || 'neutral'}</span>
                     <span class="badge ${volClass}">Vol: ${curr.volatility_label || 'N/A'}</span>
                 </div>
@@ -1654,10 +1710,10 @@
             setTimeout(() => {
                 const el = document.getElementById(`rate-${code}`);
                 if (el) animateValue(el, 0, curr.current_rate, 900);
-            }, i * 60 + 200);
+            }, i * 50 + 150);
 
             // Load sparkline
-            setTimeout(() => loadSparkline(code), i * 80 + 400);
+            setTimeout(() => loadSparkline(code), i * 60 + 300);
         });
     }
 
@@ -1741,16 +1797,29 @@
         select.innerHTML = '';
         const forecasts = data.forecasts || {};
 
+        const neighbourGroup = document.createElement('optgroup');
+        neighbourGroup.label = "🇮🇳 India's Neighbours";
+
+        const globalGroup = document.createElement('optgroup');
+        globalGroup.label = "🌍 Global Major Currencies";
+
         Object.keys(forecasts).forEach(code => {
             const meta = forecasts[code].meta || {};
             const opt = document.createElement('option');
             opt.value = code;
-            opt.textContent = `${meta.flag || ''} ${code} — ${meta.name || ''}`;
-            select.appendChild(opt);
+            opt.textContent = `${meta.flag || ''} ${code} — ${meta.country ? meta.country + ' (' + meta.name + ')' : meta.name || ''}`;
+            if (meta.category === 'neighbour') {
+                neighbourGroup.appendChild(opt);
+            } else {
+                globalGroup.appendChild(opt);
+            }
         });
 
+        if (neighbourGroup.children.length > 0) select.appendChild(neighbourGroup);
+        if (globalGroup.children.length > 0) select.appendChild(globalGroup);
+
         if (Object.keys(forecasts).length > 0) {
-            currentChartCurrency = Object.keys(forecasts)[0];
+            currentChartCurrency = select.options[0]?.value || 'BDT';
             select.value = currentChartCurrency;
         }
     }
@@ -1979,12 +2048,22 @@
             const volClass = curr.volatility_label === 'Low' ? 'badge-vol-low'
                            : curr.volatility_label === 'High' ? 'badge-vol-high' : 'badge-vol-medium';
 
+            const catBadge = meta.category === 'neighbour'
+                ? '<span class="badge badge-neighbour" style="font-size:0.58rem; padding: 2px 6px; margin-left: 6px;">🇮🇳 Neighbour</span>'
+                : '';
+
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td>
                     <div class="currency-cell">
                         <span class="flag">${meta.flag || ''}</span>
-                        <div><strong>${code}</strong><br><small style="color:var(--text-tertiary)">${meta.name || ''}</small></div>
+                        <div>
+                            <div style="display:flex; align-items:center;">
+                                <strong>${code}</strong>
+                                ${catBadge}
+                            </div>
+                            <small style="color:var(--text-tertiary)">${meta.country ? meta.country + ' · ' : ''}${meta.name || ''}</small>
+                        </div>
                     </div>
                 </td>
                 <td class="rate-cell">${formatRate(curr.current_rate)}</td>

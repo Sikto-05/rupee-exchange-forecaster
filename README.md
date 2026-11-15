@@ -3,19 +3,20 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Framework: Flask](https://img.shields.io/badge/framework-Flask-green.svg)](https://flask.palletsprojects.com/)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Cloudflare_Tunnel-orange.svg)](https://authentication-lighter-vii-therefore.trycloudflare.com)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Live_Portal-blue.svg)](https://sikto-05.github.io/rupee-exchange-forecaster/)
 
-> **RupeeVision** is a financial intelligence and currency forecasting web platform. It analyzes **10 years of daily macroeconomic data (2,600+ trading days)** from the European Central Bank (ECB) to compute real-time cross-currency rates and forecast **3–4 day forward trajectories** for the US Dollar (USD/INR) and 15 world currencies against the Indian Rupee (INR).
+> **RupeeVision** is a financial intelligence and foreign exchange forecasting web platform. It analyzes **10 years of daily macroeconomic data (2,600+ trading days)** from the European Central Bank (ECB) and regional central banks to compute real-time cross-currency rates and forecast **3–4 day forward trajectories** for the US Dollar (USD/INR), **India's neighbouring countries**, and major global vehicle currencies against the Indian Rupee (INR).
 
 ---
 
 ## 🌟 Key Features
 
-- **Single-Input Cross-Rate Engine:** Insert the day's US Dollar rate (USD/INR) to instantly derive equilibrium valuations in Indian Rupees for 15 world currencies.
-- **✨ 10-Year AI Dollar Predictor:** Dedicated machine learning pipeline specifically analyzing 10 years of USD/INR market trends to predict today's rate and forward 4-day outlook with 90% confidence corridors.
+- **Single-Input Cross-Rate Engine:** Simply input today's US Dollar rate (USD/INR) to instantly derive equilibrium valuations in Indian Rupees for **23 currencies**.
+- **🇮🇳 India's Neighbours Coverage:** Full support for India's immediate neighbouring economies — Bangladesh (BDT), Pakistan (PKR), Nepal (NPR), Sri Lanka (LKR), Bhutan (BTN), Myanmar (MMK), Afghanistan (AFN), Maldives (MVR), and China (CNY) with official peg handling (NPR 1.60 peg, BTN 1:1 parity).
+- **📊 10-Year AI Forward Trajectory for Dollar & All Currencies:** Forward 4-day econometric outlook with 90% Brownian confidence corridors, volatility indices, and momentum indicators.
 - **Ensemble Forecasting Architecture:** Combines multi-lag autoregressive Ridge Regression ($\text{Lags}_{1..10}$, $\text{MA}_5$, $\text{MA}_{20}$, $\text{MA}_{50}$, Rolling Volatility, DOW Seasonality) with Exponential Weighted Moving Average (EWMA) momentum drift.
-- **Brownian Diffusion Confidence Envelopes:** Real-time upper and lower limits scaling with $\sqrt{t}$ based on historical volatility.
-- **Fintech Glassmorphism Dashboard:** Built in a deep navy and electric gold theme with interactive Chart.js graphs (1M, 3M, 6M, 1Y, 5Y, 10Y), real-time sparklines, sortable tables, and one-click CSV export.
+- **Dual Deployment Ready:** Seamlessly works with the Python/Flask backend and standalone as an interactive static web portal on **GitHub Pages**.
+- **Fintech Glassmorphism Dashboard:** Built in a deep navy and electric gold theme with interactive Chart.js graphs (1M, 3M, 6M, 1Y, 5Y, 10Y), real-time sparklines, category filters, sortable tables, and one-click CSV export.
 
 ---
 
@@ -25,6 +26,8 @@
 For any target world currency $C$, the exchange rate against the Indian Rupee is calculated via the vehicle US Dollar relation:
 
 $$\text{Rate}(C \to \text{INR}) = \frac{\text{Rate}(\text{USD} \to \text{INR})}{\text{Rate}(\text{USD} \to C)}$$
+
+For pegged currencies (e.g. Bhutanese Ngultrum BTN at 1:1, Nepalese Rupee NPR at 1.60 per INR), the official parity is strictly preserved.
 
 ### 2. Forward Trajectory & Uncertainty Corridor
 For each forecast step $d \in \{1, 2, 3, 4\}$ trading days ahead:
@@ -37,25 +40,38 @@ $$\text{Lower}_d = R_{t+d} - R_{t+d} \cdot (z_{0.90} \cdot \sigma_{\text{daily}}
 
 ---
 
-## 🌍 Supported Currencies (15 Pairs)
+## 🌍 Supported Currencies (23 Pairs)
 
-| Currency | Code | Country / Region | Peg / Valuation |
-|:---:|:---:|:---|:---:|
-| 🇺🇸 | **USD** | United States | Free Floating (10-Yr Model) |
-| 🇪🇺 | **EUR** | European Union | Free Floating |
-| 🇬🇧 | **GBP** | United Kingdom | Free Floating |
-| 🇯🇵 | **JPY** | Japan | Free Floating |
-| 🇦🇺 | **AUD** | Australia | Free Floating |
-| 🇨🇦 | **CAD** | Canada | Free Floating |
-| 🇨🇭 | **CHF** | Switzerland | Free Floating |
-| 🇸🇬 | **SGD** | Singapore | Free Floating |
-| 🇦🇪 | **AED** | United Arab Emirates | Pegged ($3.6725 / \text{USD}$) |
-| 🇸🇦 | **SAR** | Saudi Arabia | Pegged ($3.7500 / \text{USD}$) |
-| 🇨🇳 | **CNY** | China | Free Floating |
-| 🇹🇭 | **THB** | Thailand | Free Floating |
-| 🇲🇾 | **MYR** | Malaysia | Free Floating |
-| 🇳🇿 | **NZD** | New Zealand | Free Floating |
-| 🇰🇷 | **KRW** | South Korea | Free Floating |
+### 🇮🇳 India's Immediate Neighbours (9 Currencies)
+| Flag | Code | Country | Currency | Valuation / Peg Status |
+|:---:|:---:|:---|:---|:---:|
+| 🇧🇩 | **BDT** | Bangladesh | Bangladeshi Taka | Free Floating |
+| 🇵🇰 | **PKR** | Pakistan | Pakistani Rupee | Free Floating |
+| 🇳🇵 | **NPR** | Nepal | Nepalese Rupee | Fixed Peg (1 INR = 1.60 NPR / 1 NPR = 0.625 INR) |
+| 🇱🇰 | **LKR** | Sri Lanka | Sri Lankan Rupee | Free Floating |
+| 🇧🇹 | **BTN** | Bhutan | Bhutanese Ngultrum | Fixed At Par (1 BTN = 1 INR) |
+| 🇲🇲 | **MMK** | Myanmar | Myanmar Kyat | Free Floating |
+| 🇦🇫 | **AFN** | Afghanistan | Afghan Afghani | Free Floating |
+| 🇲🇻 | **MVR** | Maldives | Maldivian Rufiyaa | Pegged ($15.42 / \text{USD}$) |
+| 🇨🇳 | **CNY** | China | Chinese Yuan | Managed Float |
+
+### 🌐 Major Global Currencies (14 Currencies)
+| Flag | Code | Country / Region | Currency | Valuation / Peg Status |
+|:---:|:---:|:---|:---|:---:|
+| 🇺🇸 | **USD** | United States | US Dollar | Vehicle Anchor Currency |
+| 🇪🇺 | **EUR** | European Union | Euro | Free Floating |
+| 🇬🇧 | **GBP** | United Kingdom | British Pound | Free Floating |
+| 🇯🇵 | **JPY** | Japan | Japanese Yen | Free Floating |
+| 🇦🇺 | **AUD** | Australia | Australian Dollar | Free Floating |
+| 🇨🇦 | **CAD** | Canada | Canadian Dollar | Free Floating |
+| 🇨🇭 | **CHF** | Switzerland | Swiss Franc | Free Floating |
+| 🇸🇬 | **SGD** | Singapore | Singapore Dollar | Managed Float |
+| 🇦🇪 | **AED** | United Arab Emirates | UAE Dirham | Pegged ($3.6725 / \text{USD}$) |
+| 🇸🇦 | **SAR** | Saudi Arabia | Saudi Riyal | Pegged ($3.7500 / \text{USD}$) |
+| 🇹🇭 | **THB** | Thailand | Thai Baht | Free Floating |
+| 🇲🇾 | **MYR** | Malaysia | Malaysian Ringgit | Free Floating |
+| 🇳🇿 | **NZD** | New Zealand | New Zealand Dollar | Free Floating |
+| 🇰🇷 | **KRW** | South Korea | South Korean Won | Free Floating |
 
 ---
 
@@ -63,7 +79,7 @@ $$\text{Lower}_d = R_{t+d} - R_{t+d} \cdot (z_{0.90} \cdot \sigma_{\text{daily}}
 
 ### 1. Clone & Set Up Virtual Environment
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Sikto-05/rupee-exchange-forecaster.git
 cd rupee-exchange-forecaster
 python -m venv venv
 # On Windows:
@@ -83,8 +99,8 @@ Open [http://localhost:5000](http://localhost:5000) in your browser.
 
 ## 📡 REST API Endpoints
 
+- `POST /api/calculate` — Accepts `{"usd_inr_rate": 84.50}` and returns cross-rates and 4-day forecasts for all 23 currencies.
 - `GET /api/dollar-prediction` — Fetches 10-year USD/INR statistical analysis, equilibrium rate, and 4-day forward trajectory.
-- `POST /api/calculate` — Accepts `{"usd_inr_rate": 84.50}` and returns cross-rates and 4-day forecasts for all 15 currencies.
 - `GET /api/historical/<currency>?period=1Y&usd_inr=84.50` — Returns downsampled historical time-series data for charting.
 - `GET /health` — Status and engine metadata.
 
