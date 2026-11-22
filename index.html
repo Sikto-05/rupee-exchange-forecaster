@@ -2320,16 +2320,6 @@
         URL.revokeObjectURL(url);
     }
 
-        const csv = rows.map(r => r.join(',')).join('\n');
-        const blob = new Blob([csv], { type: 'text/csv' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `rupeevision_forecast_${new Date().toISOString().slice(0, 10)}.csv`;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
     /* ── Helpers ──────────────────────────────────────────────── */
     function formatRate(val) {
         if (val == null) return '—';
