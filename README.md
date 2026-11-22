@@ -5,7 +5,12 @@
 [![Framework: Flask](https://img.shields.io/badge/framework-Flask-green.svg)](https://flask.palletsprojects.com/)
 [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Live_Portal-blue.svg)](https://sikto-05.github.io/rupee-exchange-forecaster/)
 
-> **RupeeVision** is a financial intelligence and foreign exchange forecasting web platform. It analyzes **10 years of daily macroeconomic data (2,600+ trading days)** from the European Central Bank (ECB) and regional central banks to compute real-time cross-currency rates and forecast **3–4 day forward trajectories** for the US Dollar (USD/INR), **India's neighbouring countries**, and major global vehicle currencies against the Indian Rupee (INR).
+> ### ⚖️ Model Disclaimer:
+> “ This model is based on the historical exchange-rate data of the last 10 years obtained from Yahoo Finance. The forecasting is performed using historical data and is intended to predict future exchange-rate trends. This is not a live forecasting model and does not use real-time market data. ”
+
+---
+
+> **RupeeVision** is a financial intelligence and foreign exchange forecasting web platform. It analyzes **10 years of daily macroeconomic data (2,600+ trading days)** from Yahoo Finance and regional central banks to compute real-time cross-currency rates and forecast **3–4 day forward trajectories** for the US Dollar (USD/INR), **India's neighbouring countries**, and major global vehicle currencies against the Indian Rupee (INR).
 
 ---
 

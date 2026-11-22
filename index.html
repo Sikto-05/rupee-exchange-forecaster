@@ -96,6 +96,117 @@
         }
 
         /* ═══════════════════════════════════════════════════════════
+           TOPMOST DISCLAIMER BAR & HERO SLIDE DISCLAIMER CARD
+           ═══════════════════════════════════════════════════════════ */
+        .topmost-disclaimer-bar {
+            background: linear-gradient(90deg, rgba(6, 10, 26, 0.98), rgba(20, 28, 65, 0.95), rgba(6, 10, 26, 0.98));
+            border-bottom: 1px solid rgba(240, 185, 11, 0.25);
+            padding: 10px 0;
+            position: relative;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(0, 0, 0, 0.4);
+        }
+
+        .topmost-disclaimer-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            text-align: center;
+        }
+
+        .disclaimer-chip {
+            background: rgba(240, 185, 11, 0.15);
+            border: 1px solid rgba(240, 185, 11, 0.4);
+            color: var(--accent-gold);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-family: var(--font-mono);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            flex-shrink: 0;
+        }
+
+        .topmost-disclaimer-text {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+            line-height: 1.5;
+            max-width: 1100px;
+        }
+
+        /* ── Hero Slide Disclaimer Card ── */
+        .model-disclaimer-card {
+            background: linear-gradient(135deg, rgba(240, 185, 11, 0.06) 0%, rgba(12, 18, 48, 0.85) 50%, rgba(0, 212, 255, 0.04) 100%);
+            border: 1px solid rgba(240, 185, 11, 0.3);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: var(--radius-md);
+            padding: 18px 24px;
+            margin: 22px auto 26px auto;
+            max-width: 960px;
+            text-align: left;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .model-disclaimer-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; width: 140px; height: 100%;
+            background: radial-gradient(circle at top right, rgba(240, 185, 11, 0.09), transparent 70%);
+            pointer-events: none;
+        }
+
+        .model-disclaimer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            padding-bottom: 8px;
+        }
+
+        .model-disclaimer-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .model-disclaimer-badge {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.25);
+            padding: 3px 10px;
+            border-radius: 12px;
+        }
+
+        .model-disclaimer-quote {
+            font-size: 0.9rem;
+            line-height: 1.65;
+            color: rgba(255, 255, 255, 0.92);
+            font-style: italic;
+            letter-spacing: 0.1px;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
            HEADER
            ═══════════════════════════════════════════════════════════ */
         .header {
@@ -668,19 +779,40 @@
             color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 16px;
-        }
-
-        .card-sparkline {
-            width: 100%;
-            height: 50px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
 
         .card-forecast {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .card-chart-hint {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+            transition: var(--transition-fast);
+        }
+
+        .currency-card:hover .card-chart-hint {
+            color: var(--accent-cyan);
+        }
+
+        .card-chart-hint .hint-arrow {
+            font-size: 0.8rem;
+            transition: transform var(--transition-fast);
+        }
+
+        .currency-card:hover .card-chart-hint .hint-arrow {
+            transform: translate(2px, -2px);
+            color: var(--accent-gold);
         }
 
         .forecast-day {
@@ -1026,12 +1158,10 @@
             .btn-forecast { width: 100%; }
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           SPARKLINE CANVAS
-           ═══════════════════════════════════════════════════════════ */
-        .sparkline-canvas {
-            width: 100% !important;
-            height: 50px !important;
+        @media (max-width: 768px) {
+            .model-disclaimer-card { padding: 14px 16px; margin: 16px auto 20px auto; }
+            .model-disclaimer-quote { font-size: 0.82rem; }
+            .topmost-disclaimer-text { font-size: 0.74rem; }
         }
 
         /* ── Table responsive wrapper ────────────────────────────── */
@@ -1097,6 +1227,18 @@
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
+<!-- ══════════ TOPMOST DISCLAIMER BAR ══════════ -->
+<div class="topmost-disclaimer-bar">
+    <div class="container">
+        <div class="topmost-disclaimer-content">
+            <span class="disclaimer-chip">⚖️ MODEL DISCLAIMER</span>
+            <span class="topmost-disclaimer-text">
+                “ This model is based on the historical exchange-rate data of the last 10 years obtained from Yahoo Finance. The forecasting is performed using historical data and is intended to predict future exchange-rate trends. This is not a live forecasting model and does not use real-time market data. ”
+            </span>
+        </div>
+    </div>
+</div>
+
 <!-- ══════════ HEADER ══════════ -->
 <header class="header">
     <div class="container header-inner">
@@ -1120,6 +1262,20 @@
     <div class="container">
         <h2 class="hero-title">Forecast Global Currency Rates Against ₹</h2>
         <p class="hero-subtitle">Enter the current USD/INR exchange rate to compute real-time cross-rates and 4-day forecasts synthesized with 10-year market dynamics, current world politics, and breaking global news</p>
+
+        <!-- Topmost Slide Model Disclaimer Card -->
+        <div class="model-disclaimer-card">
+            <div class="model-disclaimer-header">
+                <div class="model-disclaimer-title">
+                    <span>⚖️</span>
+                    <span>Data Source &amp; Forecasting Methodology Disclaimer</span>
+                </div>
+                <span class="model-disclaimer-badge">Yahoo Finance · 10-Yr Historical Baseline</span>
+            </div>
+            <div class="model-disclaimer-quote">
+                “ This model is based on the historical exchange-rate data of the last 10 years obtained from Yahoo Finance. The forecasting is performed using historical data and is intended to predict future exchange-rate trends. This is not a live forecasting model and does not use real-time market data. ”
+            </div>
+        </div>
 
         <div class="input-group">
             <div class="input-wrapper">
@@ -2187,7 +2343,6 @@
                 </div>
                 <div class="card-rate" id="rate-${code}">0.0000</div>
                 <div class="card-rate-label">INR per 1 ${meta.symbol || ''}${code}</div>
-                <canvas class="sparkline-canvas" id="spark-${code}"></canvas>
                 <div class="card-forecast">${forecastHTML}</div>
                 <div class="card-badges">
                     ${catBadge}
@@ -2198,6 +2353,10 @@
                     <span style="color:var(--accent-gold); font-size:0.75rem;">🗞️</span>
                     <span>${geo.headline || 'Macroeconomic foreign exchange flows'}</span>
                 </div>
+                <div class="card-chart-hint">
+                    <span>Explore Trend in Main Interactive Chart</span>
+                    <span class="hint-arrow">↗</span>
+                </div>
             `;
 
             grid.appendChild(card);
@@ -2207,85 +2366,13 @@
                 const el = document.getElementById(`rate-${code}`);
                 if (el) animateValue(el, 0, curr.current_rate, 900);
             }, i * 50 + 150);
-
-            // Load sparkline
-            setTimeout(() => loadSparkline(code), i * 60 + 300);
         });
     }
 
-    /* ── Sparklines ───────────────────────────────────────────── */
-    async function loadSparkline(code) {
-        try {
-            let points = [];
-            try {
-                const sparkUrl = lastEnteredRate 
-                    ? `/api/historical/${code}?period=1M&usd_inr=${lastEnteredRate}`
-                    : `/api/historical/${code}?period=1M`;
-                const res = await fetch(sparkUrl);
-                if (res.ok) {
-                    const json = await res.json();
-                    points = json.data || [];
-                }
-            } catch (netErr) {}
-
-            if (points.length === 0) {
-                const csv = await getOrFetchCsvData();
-                if (csv && csv.rows.length > 0) {
-                    const recentRows = csv.rows.slice(-25);
-                    for (let i = 0; i < recentRows.length; i++) {
-                        const r = recentRows[i];
-                        const usdToX = r[code] || 1.0;
-                        points.push({ date: r.date, rate: (r.INR || 84.5) / usdToX });
-                    }
-                }
-            }
-            if (points.length < 3) return;
-
-            const canvas = document.getElementById(`spark-${code}`);
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            // Destroy previous
-            if (sparkCharts[code]) sparkCharts[code].destroy();
-
-            const labels = points.map(p => p.date);
-            const values = points.map(p => p.rate);
-            const isUp = values[values.length - 1] >= values[0];
-
-            const color = isUp ? '#00c853' : '#ff1744';
-            const gradient = ctx.createLinearGradient(0, 0, 0, 50);
-            gradient.addColorStop(0, isUp ? 'rgba(0,200,83,0.2)' : 'rgba(255,23,68,0.2)');
-            gradient.addColorStop(1, 'rgba(0,0,0,0)');
-
-            sparkCharts[code] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [{
-                        data: values,
-                        borderColor: color,
-                        borderWidth: 1.5,
-                        backgroundColor: gradient,
-                        fill: true,
-                        pointRadius: 0,
-                        tension: 0.4,
-                    }],
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                    scales: {
-                        x: { display: false },
-                        y: { display: false },
-                    },
-                    animation: { duration: 1000 },
-                },
-            });
-        } catch (e) {
-            // silently fail for sparklines
-        }
-    }
+    /* ── Sparklines Removed ───────────────────────────────────── */
+    // Individual small country graphs removed to keep only the most relevant visualizations.
+    // Primary interactive visualization is retained in the Historical Trend & Forecast Corridor chart.
+    async function loadSparkline(code) {}
 
     /* ── Chart Select ─────────────────────────────────────────── */
     function populateChartSelect(data) {
