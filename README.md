@@ -22,7 +22,7 @@
 - **📊 10-Year AI Forward Trajectory for Dollar & All Currencies:** Forward 4-day econometric outlook with 90% Brownian confidence corridors, geopolitical volatility scalers ($\kappa_{\text{geo}}$), and momentum indicators.
 - **Ensemble Forecasting Architecture:** Combines multi-lag autoregressive Ridge Regression ($\text{Lags}_{1..10}$, $\text{MA}_5$, $\text{MA}_{20}$, $\text{MA}_{50}$, Rolling Volatility, DOW Seasonality) with Exponential Weighted Moving Average (EWMA) momentum drift and geopolitical news sentiment.
 - **Dual Deployment Ready:** Seamlessly works with the Python/Flask backend and standalone as an interactive static web portal on **GitHub Pages**.
-- **Fintech Glassmorphism Dashboard:** Built in a deep navy and electric gold theme with interactive Chart.js graphs (1M, 3M, 6M, 1Y, 5Y, 10Y), real-time sparklines, category filters, a live Geopolitical News Intelligence Terminal, sortable tables, and one-click CSV export.
+- **Fintech Glassmorphism Dashboard:** Built in a deep navy and electric gold theme with interactive Chart.js graphs (1M, 3M, 6M, 1Y, 5Y, 10Y), category filters, the USD 10-Yr Outlook Banner, streamlined currency cards, and one-click CSV export.
 
 ---
 

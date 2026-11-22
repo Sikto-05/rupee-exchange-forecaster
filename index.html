@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>₹ RupeeVision — AI Currency Forecaster</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -452,116 +455,6 @@
             overflow: hidden;
         }
 
-        /* ── Geopolitical & News Intelligence Terminal ─────────────── */
-        .geo-news-terminal {
-            background: linear-gradient(135deg, rgba(12, 22, 55, 0.8), rgba(8, 14, 38, 0.9));
-            border: 1px solid rgba(0, 212, 255, 0.28);
-            border-radius: var(--radius-lg);
-            padding: 24px 28px;
-            margin-bottom: 30px;
-            backdrop-filter: blur(var(--glass-blur));
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 22px rgba(0, 212, 255, 0.06);
-            position: relative;
-        }
-
-        .geo-news-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            padding-bottom: 14px;
-        }
-
-        .geo-news-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: var(--font-heading);
-            font-size: 1.12rem;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .geo-pulse-dot {
-            width: 9px;
-            height: 9px;
-            background: #00e676;
-            border-radius: 50%;
-            display: inline-block;
-            box-shadow: 0 0 10px #00e676;
-            animation: pulse-green 1.8s infinite;
-        }
-
-        @keyframes pulse-green {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
-            70% { transform: scale(1.15); box-shadow: 0 0 0 8px rgba(0, 230, 118, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
-        }
-
-        .geo-news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 14px;
-        }
-
-        .geo-news-card {
-            background: rgba(255, 255, 255, 0.025);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-radius: var(--radius-sm);
-            padding: 14px 16px;
-            transition: all var(--transition-fast);
-        }
-
-        .geo-news-card:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 212, 255, 0.04);
-            transform: translateY(-2px);
-        }
-
-        .badge-geo-risk {
-            font-size: 0.65rem;
-            font-weight: 600;
-            padding: 3px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .badge-geo-elevated {
-            background: rgba(255, 23, 68, 0.15);
-            color: #ff5252;
-            border: 1px solid rgba(255, 23, 68, 0.35);
-        }
-
-        .badge-geo-moderate {
-            background: rgba(255, 153, 0, 0.15);
-            color: #ffb74d;
-            border: 1px solid rgba(255, 153, 0, 0.3);
-        }
-
-        .badge-geo-low {
-            background: rgba(0, 200, 83, 0.15);
-            color: #69f0ae;
-            border: 1px solid rgba(0, 200, 83, 0.3);
-        }
-
-        .card-geo-tag {
-            font-size: 0.68rem;
-            color: var(--text-tertiary);
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 4px;
-            padding: 5px 8px;
-            margin-top: 10px;
-            line-height: 1.35;
-            display: flex;
-            align-items: flex-start;
-            gap: 6px;
-        }
-
         .btn-forecast .ripple {
             position: absolute;
             border-radius: 50%;
@@ -779,15 +672,46 @@
             color: var(--text-tertiary);
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 14px;
-        }
-
-        .card-forecast {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 8px;
             margin-bottom: 12px;
         }
+
+        .card-forecast-summary {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 9px 12px;
+            margin-bottom: 12px;
+        }
+
+        .forecast-target-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .target-label {
+            font-size: 0.68rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .target-rate {
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .target-chg {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .target-chg.up { color: var(--positive); }
+        .target-chg.down { color: var(--negative); }
 
         .card-chart-hint {
             display: flex;
@@ -813,28 +737,6 @@
         .currency-card:hover .card-chart-hint .hint-arrow {
             transform: translate(2px, -2px);
             color: var(--accent-gold);
-        }
-
-        .forecast-day {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 6px;
-            padding: 8px 4px;
-        }
-
-        .forecast-day .day {
-            font-size: 0.6rem;
-            color: var(--text-tertiary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .forecast-day .rate {
-            font-family: var(--font-mono);
-            font-size: 0.78rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            margin-top: 2px;
         }
 
         .card-badges {
@@ -944,97 +846,23 @@
             height: 400px;
         }
 
-        /* ═══════════════════════════════════════════════════════════
-           FORECAST TABLE
-           ═══════════════════════════════════════════════════════════ */
-        .table-section {
-            margin-top: 40px;
-        }
-
-        .table-wrapper {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            backdrop-filter: blur(var(--glass-blur));
-        }
-
-        .table-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .table-toolbar h3 {
-            font-family: var(--font-heading);
-            font-size: 1.1rem;
-        }
-
         .btn-export {
             font-family: var(--font-body);
             font-size: 0.78rem;
             font-weight: 500;
-            padding: 8px 20px;
+            padding: 8px 18px;
             border-radius: var(--radius-sm);
-            border: 1px solid var(--accent-cyan);
-            background: transparent;
-            color: var(--accent-cyan);
+            border: 1px solid var(--accent-gold);
+            background: rgba(240, 185, 11, 0.08);
+            color: var(--accent-gold);
             cursor: pointer;
             transition: all var(--transition-fast);
         }
 
         .btn-export:hover {
-            background: var(--accent-cyan-dim);
-        }
-
-        .forecast-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .forecast-table th {
-            font-size: 0.68rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 14px 16px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-            cursor: pointer;
-            user-select: none;
-            white-space: nowrap;
-        }
-
-        .forecast-table th:hover {
-            color: var(--accent-gold);
-        }
-
-        .forecast-table td {
-            font-size: 0.85rem;
-            padding: 14px 16px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-        }
-
-        .forecast-table tr:hover td {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .forecast-table .rate-cell {
-            font-family: var(--font-mono);
-            font-weight: 500;
-        }
-
-        .forecast-table .currency-cell {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .forecast-table .currency-cell .flag {
-            font-size: 1.3rem;
+            background: rgba(240, 185, 11, 0.2);
+            border-color: var(--accent-gold);
+            color: #fff;
         }
 
         /* ═══════════════════════════════════════════════════════════
@@ -1316,12 +1144,8 @@
                 <div class="value">4 Days Ahead</div>
             </div>
             <div class="quick-stat">
-                <div class="label">Geopolitical Intel</div>
-                <div class="value" style="color: #00e676; font-size: 0.95rem;">● Active (2026)</div>
-            </div>
-            <div class="quick-stat">
-                <div class="label">Historical Data</div>
-                <div class="value">10 Years</div>
+                <div class="label">Historical Baseline</div>
+                <div class="value">10 Years (Yahoo)</div>
             </div>
         </div>
 
@@ -1342,63 +1166,6 @@
             <div class="big-label">USD / INR Exchange Rate</div>
         </div>
 
-        <!-- ══════════ GEOPOLITICAL & NEWS INTELLIGENCE TERMINAL ══════════ -->
-        <div class="geo-news-terminal" id="geoNewsTerminal">
-            <div class="geo-news-header">
-                <div class="geo-news-title">
-                    <span class="geo-pulse-dot"></span>
-                    <span>🌍 World Politics & News Intelligence Feed</span>
-                    <span style="font-size: 0.68rem; background: rgba(0, 212, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 212, 255, 0.3); padding: 3px 10px; border-radius: 12px; font-weight: 500;">
-                        Active 4-Day Geopolitical Catalyst Engine
-                    </span>
-                </div>
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <span style="font-size: 0.72rem; color: var(--text-tertiary); text-transform: uppercase;">Global Geopolitical Risk:</span>
-                    <span class="badge-geo-risk badge-geo-moderate" id="geoRiskIndex">Moderate-Elevated</span>
-                </div>
-            </div>
-
-            <!-- Top Macro Catalysts -->
-            <div class="geo-news-grid" id="geoMacroGrid">
-                <div class="geo-news-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                        <span style="font-size:0.75rem; font-weight:600; color:var(--accent-gold);">🏛️ US Fed & Global Tariffs</span>
-                        <span class="badge-geo-risk badge-geo-moderate">USD Bullish</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">
-                        Cautious Fed rate-cut trajectory and elevated Treasury yields sustain global dollar demand. Trade tariff rhetoric induces safe-haven dollar accumulation.
-                    </p>
-                </div>
-                <div class="geo-news-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                        <span style="font-size:0.75rem; font-weight:600; color:var(--accent-cyan);">🛢️ Middle East & Energy Routes</span>
-                        <span class="badge-geo-risk badge-geo-elevated">Crude Volatility</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">
-                        Strait of Hormuz and Red Sea shipping route watchfulness keeps Brent crude volatile, directly impacting net energy-importing economies like India.
-                    </p>
-                </div>
-                <div class="geo-news-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                        <span style="font-size:0.75rem; font-weight:600; color:#ff9900;">🇮🇳 South Asian Alliances & Pacts</span>
-                        <span class="badge-geo-risk badge-geo-low">Stabilizing</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">
-                        $400M RBI-Maldives currency swap, Nepal-Bhutan hydro clean energy transmission pacts, and IMF programs in Pakistan & Sri Lanka shield regional stability.
-                    </p>
-                </div>
-                <div class="geo-news-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                        <span style="font-size:0.75rem; font-weight:600; color:#b388ff;">🇨🇳 PBOC Counter-Cyclical Fixings</span>
-                        <span class="badge-geo-risk badge-geo-moderate">Managed Float</span>
-                    </div>
-                    <p style="font-size:0.75rem; color:var(--text-secondary); line-height:1.45;">
-                        People's Bank of China sets firm daily midpoint fixings to prevent speculative yuan depreciation amidst US trade tariff rhetoric and manufacturing liquidity stimulus.
-                    </p>
-                </div>
-            </div>
-        </div>
-
         <!-- USD / INR 10-Year Macro & 4-Day Forward Forecast Banner -->
         <div class="usd-outlook-card" id="usdOutlookCard" style="display: none;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 20px;">
@@ -1410,7 +1177,7 @@
                             <span class="badge badge-bullish" id="usdTrendBadge">BULLISH</span>
                         </div>
                         <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;">
-                            US Dollar to Indian Rupee Forecast Engine · 2,600+ Trading Days Analyzed + Real-Time Geopolitical Catalysts
+                            US Dollar to Indian Rupee Forecast Engine · 2,600+ Trading Days Analyzed
                         </p>
                     </div>
                 </div>
@@ -1440,23 +1207,6 @@
                 </div>
             </div>
 
-            <!-- Geopolitical & News Catalyst Box for USD -->
-            <div style="background: rgba(240, 185, 11, 0.05); border: 1px solid rgba(240, 185, 11, 0.25); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 20px; line-height: 1.5;" id="usdGeoBox">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <span style="font-size: 1.1rem;">🗞️</span>
-                        <strong style="color: var(--accent-gold); font-size: 0.85rem;" id="usdGeoHeadline">World Politics & News Driver</strong>
-                    </div>
-                    <span class="badge-geo-risk badge-geo-moderate" id="usdGeoRiskBadge">Risk: Moderate</span>
-                </div>
-                <p style="font-size: 0.8rem; color: rgba(255, 255, 255, 0.88); margin-bottom: 6px;" id="usdGeoDriverText">
-                    US Federal Reserve interest rate path and safe-haven dollar accumulation drive upward structural drift.
-                </p>
-                <div style="font-size: 0.72rem; color: var(--accent-cyan); font-family: var(--font-mono);" id="usdGeoImpactText">
-                    4-Day Projected Path: Bullish momentum against INR within controlled corridors.
-                </div>
-            </div>
-
             <!-- 4-Day Forward Forecast Grid for Dollar -->
             <div style="margin-bottom: 16px;">
                 <div style="font-size: 0.72rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; font-weight: 600;">
@@ -1469,7 +1219,8 @@
 
             <!-- Macro Commentary -->
             <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: var(--radius-sm); padding: 14px 18px; font-size: 0.82rem; color: rgba(255, 255, 255, 0.85); line-height: 1.5;" id="usdSummaryText">
-                Analyzing 10-year macroeconomic trends and current world politics...
+                Analyzing 10-year macroeconomic historical trends...
+            </div>
             </div>
         </div>
 
@@ -1490,12 +1241,15 @@
         <!-- Chart Section -->
         <div class="chart-section">
             <div class="section-header">
-                <h2 class="section-title">Historical <span>Trend</span></h2>
+                <h2 class="section-title">Historical <span>Trend & Forecast Corridor</span></h2>
             </div>
             <div class="chart-container">
                 <div class="chart-controls">
-                    <select class="chart-currency-select" id="chartCurrencySelect" onchange="loadChart()">
-                    </select>
+                    <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                        <select class="chart-currency-select" id="chartCurrencySelect" onchange="loadChart()">
+                        </select>
+                        <button class="btn-export" onclick="exportToCSV()">📥 Export All Forecasts (CSV)</button>
+                    </div>
                     <div class="period-tabs" id="periodTabs">
                         <button class="period-tab" data-period="1M" onclick="setPeriod('1M',this)">1M</button>
                         <button class="period-tab" data-period="3M" onclick="setPeriod('3M',this)">3M</button>
@@ -1507,37 +1261,6 @@
                 </div>
                 <div class="chart-canvas-wrapper">
                     <canvas id="mainChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Forecast Table -->
-        <div class="table-section">
-            <div class="section-header">
-                <h2 class="section-title">4-Day Forecast <span>Table</span></h2>
-            </div>
-            <div class="table-wrapper">
-                <div class="table-toolbar">
-                    <h3>Complete Forecast Overview</h3>
-                    <button class="btn-export" onclick="exportToCSV()">📥 Export CSV</button>
-                </div>
-                <div class="table-scroll">
-                    <table class="forecast-table" id="forecastTable">
-                        <thead>
-                            <tr>
-                                <th onclick="sortTable(0)">Currency</th>
-                                <th onclick="sortTable(1)">Current (₹)</th>
-                                <th onclick="sortTable(2)">Day 1 (₹)</th>
-                                <th onclick="sortTable(3)">Day 2 (₹)</th>
-                                <th onclick="sortTable(4)">Day 3 (₹)</th>
-                                <th onclick="sortTable(5)">Day 4 (₹)</th>
-                                <th onclick="sortTable(6)">Trend</th>
-                                <th onclick="sortTable(7)">Volatility</th>
-                                <th onclick="sortTable(8)">World Politics & News Catalyst</th>
-                            </tr>
-                        </thead>
-                        <tbody id="forecastTableBody"></tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -2165,52 +1888,9 @@
             grid.appendChild(dayBox);
         });
 
-        if (dollarData.geopolitical_analysis) {
-            const geo = dollarData.geopolitical_analysis;
-            const geoHeadline = document.getElementById('usdGeoHeadline');
-            if (geoHeadline) geoHeadline.textContent = geo.headline || 'World Politics & News Driver';
-            const geoDriver = document.getElementById('usdGeoDriverText');
-            if (geoDriver) geoDriver.textContent = geo.political_driver || '';
-            const geoImpact = document.getElementById('usdGeoImpactText');
-            if (geoImpact) geoImpact.textContent = '4-Day Trajectory: ' + (geo.four_day_news_impact || '');
-            const riskBadge = document.getElementById('usdGeoRiskBadge');
-            if (riskBadge) {
-                riskBadge.textContent = 'Risk: ' + (geo.risk_level || 'Moderate');
-                riskBadge.className = 'badge-geo-risk ' + (geo.risk_level === 'Elevated' ? 'badge-geo-elevated' : geo.risk_level === 'Low' ? 'badge-geo-low' : 'badge-geo-moderate');
-            }
-        }
-
         document.getElementById('usdSummaryText').innerHTML = `
-            <strong>📊 10-Year AI Macroeconomic & Current Geopolitical Analysis:</strong> ${dollarData.analysis_summary}
+            <strong>📊 10-Year AI Macroeconomic Analysis:</strong> ${dollarData.analysis_summary || 'Analysis complete.'}
         `;
-    }
-
-    /* ── Render Geopolitical Intelligence Feed ───────────────── */
-    function renderGeopoliticalTerminal(geoData) {
-        if (!geoData) geoData = GLOBAL_GEOPOLITICAL_LANDSCAPE;
-        const riskEl = document.getElementById('geoRiskIndex');
-        if (riskEl && geoData.global_risk_index) {
-            riskEl.textContent = geoData.global_risk_index;
-        }
-
-        const grid = document.getElementById('geoMacroGrid');
-        if (grid && geoData.primary_macro_drivers) {
-            grid.innerHTML = '';
-            geoData.primary_macro_drivers.forEach(driver => {
-                const card = document.createElement('div');
-                card.className = 'geo-news-card';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
-                        <span style="font-size:0.75rem; font-weight:600; color:var(--accent-gold);">${driver.topic}</span>
-                        <span class="badge-geo-risk badge-geo-moderate">${driver.tag || driver.sentiment}</span>
-                    </div>
-                    <p style="font-size:0.74rem; color:var(--text-secondary); line-height:1.45;">
-                        ${driver.summary}
-                    </p>
-                `;
-                grid.appendChild(card);
-            });
-        }
     }
 
     /* ── Render Dashboard ─────────────────────────────────────── */
@@ -2227,9 +1907,6 @@
         const bigRate = document.getElementById('bigRate');
         animateValue(bigRate, 0, rate, 1000);
 
-        // Render Geopolitical Feed
-        renderGeopoliticalTerminal(data.global_geopolitics);
-
         // Render dedicated USD / INR 10-Year AI Outlook Card
         if (data.dollar_forecast) {
             renderDollarOutlook(data.dollar_forecast, rate);
@@ -2240,9 +1917,6 @@
 
         // Populate chart select
         populateChartSelect(data);
-
-        // Render forecast table
-        renderForecastTable(data);
 
         // Load default chart
         loadChart();
@@ -2305,15 +1979,13 @@
                 card.classList.add('active');
             };
 
-            // Forecast days HTML
-            let forecastHTML = '';
-            (curr.forecasts || []).forEach(f => {
-                forecastHTML += `
-                    <div class="forecast-day">
-                        <div class="day">${f.day_label ? f.day_label.split(',')[0] : ''}</div>
-                        <div class="rate">${formatRate(f.rate)}</div>
-                    </div>`;
-            });
+            // Forecast summary (4-Day forward prediction)
+            const preds = curr.forecasts || [];
+            const day4Rate = preds[3]?.rate || curr.current_rate;
+            const day4ChangePct = preds[3]?.change_pct != null
+                ? preds[3].change_pct
+                : (((day4Rate - curr.current_rate) / curr.current_rate) * 100);
+            const isForeUp = day4ChangePct >= 0;
 
             // Trend/Volatility badges
             const trendClass = curr.trend === 'bullish' ? 'badge-bullish'
@@ -2324,9 +1996,6 @@
             const catBadge = meta.category === 'neighbour'
                 ? '<span class="badge badge-neighbour">🇮🇳 Neighbour</span>'
                 : '<span class="badge badge-global">🌍 Global</span>';
-
-            const geo = curr.geopolitical_driver || GEOPOLITICAL_NEWS_DRIVERS[code] || {};
-            const riskClass = geo.risk_level === 'Elevated' ? 'badge-geo-elevated' : (geo.risk_level === 'Low' ? 'badge-geo-low' : 'badge-geo-moderate');
 
             card.innerHTML = `
                 <div class="card-header">
@@ -2343,18 +2012,20 @@
                 </div>
                 <div class="card-rate" id="rate-${code}">0.0000</div>
                 <div class="card-rate-label">INR per 1 ${meta.symbol || ''}${code}</div>
-                <div class="card-forecast">${forecastHTML}</div>
+                <div class="card-forecast-summary">
+                    <div class="forecast-target-row">
+                        <span class="target-label">4-Day Target</span>
+                        <span class="target-rate">₹${formatRate(day4Rate)}</span>
+                        <span class="target-chg ${isForeUp ? 'up' : 'down'}">${isForeUp ? '▲ +' : '▼ '}${day4ChangePct.toFixed(2)}%</span>
+                    </div>
+                </div>
                 <div class="card-badges">
                     ${catBadge}
                     <span class="badge ${trendClass}">${curr.trend || 'neutral'}</span>
-                    <span class="badge-geo-risk ${riskClass}">Risk: ${geo.risk_level || 'Moderate'}</span>
-                </div>
-                <div class="card-geo-tag" title="${geo.political_driver || ''}">
-                    <span style="color:var(--accent-gold); font-size:0.75rem;">🗞️</span>
-                    <span>${geo.headline || 'Macroeconomic foreign exchange flows'}</span>
+                    <span class="badge ${volClass}">Vol: ${curr.volatility_label || 'Low'}</span>
                 </div>
                 <div class="card-chart-hint">
-                    <span>Explore Trend in Main Interactive Chart</span>
+                    <span>View 10-Yr Historical &amp; 4-Day Corridor in Main Chart</span>
                     <span class="hint-arrow">↗</span>
                 </div>
             `;
@@ -2615,89 +2286,6 @@
         loadChart();
     }
 
-    /* ── Forecast Table ───────────────────────────────────────── */
-    function renderForecastTable(data) {
-        const tbody = document.getElementById('forecastTableBody');
-        tbody.innerHTML = '';
-        const forecasts = data.forecasts || {};
-
-        Object.keys(forecasts).forEach(code => {
-            const curr = forecasts[code];
-            const meta = curr.meta || {};
-            const preds = curr.forecasts || [];
-
-            const trendClass = curr.trend === 'bullish' ? 'badge-bullish'
-                             : curr.trend === 'bearish' ? 'badge-bearish' : 'badge-neutral';
-            const volClass = curr.volatility_label === 'Low' ? 'badge-vol-low'
-                           : curr.volatility_label === 'High' ? 'badge-vol-high' : 'badge-vol-medium';
-
-            const catBadge = meta.category === 'neighbour'
-                ? '<span class="badge badge-neighbour" style="font-size:0.58rem; padding: 2px 6px; margin-left: 6px;">🇮🇳 Neighbour</span>'
-                : '';
-
-            const geo = curr.geopolitical_driver || GEOPOLITICAL_NEWS_DRIVERS[code] || {};
-            const riskClass = geo.risk_level === 'Elevated' ? 'badge-geo-elevated' : (geo.risk_level === 'Low' ? 'badge-geo-low' : 'badge-geo-moderate');
-
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>
-                    <div class="currency-cell">
-                        <span class="flag">${meta.flag || ''}</span>
-                        <div>
-                            <div style="display:flex; align-items:center;">
-                                <strong>${code}</strong>
-                                ${catBadge}
-                            </div>
-                            <small style="color:var(--text-tertiary)">${meta.country ? meta.country + ' · ' : ''}${meta.name || ''}</small>
-                        </div>
-                    </div>
-                </td>
-                <td class="rate-cell">${formatRate(curr.current_rate)}</td>
-                <td class="rate-cell">${preds[0] ? formatRate(preds[0].rate) : '—'}</td>
-                <td class="rate-cell">${preds[1] ? formatRate(preds[1].rate) : '—'}</td>
-                <td class="rate-cell">${preds[2] ? formatRate(preds[2].rate) : '—'}</td>
-                <td class="rate-cell">${preds[3] ? formatRate(preds[3].rate) : '—'}</td>
-                <td><span class="badge ${trendClass}">${curr.trend || '—'}</span></td>
-                <td><span class="badge ${volClass}">${curr.volatility_label || '—'}</span></td>
-                <td style="min-width: 250px; font-size: 0.75rem;">
-                    <div style="font-weight:600; color:var(--accent-gold); margin-bottom: 2px;">
-                        ${geo.headline || 'Macro Equilibrium'}
-                    </div>
-                    <div style="color:var(--text-secondary); font-size:0.7rem; line-height: 1.35;">
-                        ${geo.political_driver ? geo.political_driver.slice(0, 105) + '...' : ''}
-                    </div>
-                    <div style="margin-top: 4px; display:flex; gap:6px; align-items:center;">
-                        <span class="badge-geo-risk ${riskClass}">${geo.risk_level || 'Moderate'}</span>
-                        <span style="font-family:var(--font-mono); font-size:0.65rem; color:var(--accent-cyan);">${geo.impact_bias || 'Neutral'}</span>
-                    </div>
-                </td>
-            `;
-            tbody.appendChild(tr);
-        });
-    }
-
-    /* ── Table Sorting ────────────────────────────────────────── */
-    function sortTable(colIdx) {
-        const tbody = document.getElementById('forecastTableBody');
-        const rows = Array.from(tbody.rows);
-        const dir = sortDirection[colIdx] === 'asc' ? 'desc' : 'asc';
-        sortDirection[colIdx] = dir;
-
-        rows.sort((a, b) => {
-            let aVal = a.cells[colIdx].textContent.trim();
-            let bVal = b.cells[colIdx].textContent.trim();
-            const aNum = parseFloat(aVal.replace(/[^\d.-]/g, ''));
-            const bNum = parseFloat(bVal.replace(/[^\d.-]/g, ''));
-
-            if (!isNaN(aNum) && !isNaN(bNum)) {
-                return dir === 'asc' ? aNum - bNum : bNum - aNum;
-            }
-            return dir === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-        });
-
-        rows.forEach(r => tbody.appendChild(r));
-    }
-
     /* ── CSV Export ────────────────────────────────────────────── */
     function exportToCSV() {
         if (!forecastData || !forecastData.forecasts) {
@@ -2705,11 +2293,10 @@
             return;
         }
 
-        const rows = [['Currency', 'Name', 'Current Rate (INR)', 'Day 1', 'Day 2', 'Day 3', 'Day 4', 'Trend', 'Volatility', 'Geopolitical Headline', 'Risk Level', 'News Impact']];
+        const rows = [['Currency', 'Name', 'Current Rate (INR)', 'Day 1 (₹)', 'Day 2 (₹)', 'Day 3 (₹)', 'Day 4 (₹)', 'Trend', 'Volatility']];
 
         Object.entries(forecastData.forecasts).forEach(([code, curr]) => {
             const preds = curr.forecasts || [];
-            const geo = curr.geopolitical_driver || GEOPOLITICAL_NEWS_DRIVERS[code] || {};
             rows.push([
                 code,
                 curr.meta?.name || '',
@@ -2720,11 +2307,18 @@
                 preds[3]?.rate || '',
                 curr.trend || '',
                 curr.volatility_label || '',
-                `"${(geo.headline || '').replace(/"/g, '""')}"`,
-                geo.risk_level || '',
-                `"${(geo.impact_bias || '').replace(/"/g, '""')}"`,
             ]);
         });
+
+        const csv = rows.map(r => r.join(',')).join('\n');
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rupeevision_forecast_${new Date().toISOString().slice(0, 10)}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
 
         const csv = rows.map(r => r.join(',')).join('\n');
         const blob = new Blob([csv], { type: 'text/csv' });
