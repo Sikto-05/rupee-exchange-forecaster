@@ -675,43 +675,71 @@
             margin-bottom: 12px;
         }
 
-        .card-forecast-summary {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
+        .card-forecast-section {
+            margin: 12px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: var(--radius-sm);
-            padding: 9px 12px;
-            margin-bottom: 12px;
+            padding: 10px;
         }
 
-        .forecast-target-row {
+        .card-forecast-title {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-        }
-
-        .target-label {
-            font-size: 0.68rem;
+            font-size: 0.65rem;
             color: var(--text-tertiary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .target-rate {
-            font-family: var(--font-mono);
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--accent-gold);
-        }
-
-        .target-chg {
-            font-family: var(--font-mono);
-            font-size: 0.72rem;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
             font-weight: 600;
         }
 
-        .target-chg.up { color: var(--positive); }
-        .target-chg.down { color: var(--negative); }
+        .card-forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+        }
+
+        .forecast-day-pill {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 6px;
+            padding: 7px 4px;
+            text-align: center;
+            transition: var(--transition-fast);
+        }
+
+        .forecast-day-pill:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        .pill-day {
+            font-size: 0.58rem;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            font-weight: 600;
+        }
+
+        .pill-rate {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin: 2px 0;
+            line-height: 1.2;
+        }
+
+        .pill-chg {
+            font-family: var(--font-mono);
+            font-size: 0.62rem;
+            font-weight: 600;
+        }
+
+        .pill-chg.up { color: var(--positive); }
+        .pill-chg.down { color: var(--negative); }
 
         .card-chart-hint {
             display: flex;
@@ -863,6 +891,91 @@
             background: rgba(240, 185, 11, 0.2);
             border-color: var(--accent-gold);
             color: #fff;
+        }
+
+        /* ═══════════════════════════════════════════════════════════
+           FORECAST TABLE
+           ═══════════════════════════════════════════════════════════ */
+        .table-section {
+            margin-top: 36px;
+        }
+
+        .table-wrapper {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            backdrop-filter: blur(var(--glass-blur));
+        }
+
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .table-toolbar h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: #fff;
+        }
+
+        .table-scroll {
+            overflow-x: auto;
+        }
+
+        .forecast-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .forecast-table th {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .forecast-table th:hover {
+            color: var(--accent-gold);
+        }
+
+        .forecast-table td {
+            font-size: 0.85rem;
+            padding: 14px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+        }
+
+        .forecast-table tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .forecast-table .rate-cell {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+
+        .forecast-table .currency-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .forecast-table .currency-cell .flag {
+            font-size: 1.3rem;
         }
 
         /* ═══════════════════════════════════════════════════════════
@@ -1261,6 +1374,41 @@
                 </div>
                 <div class="chart-canvas-wrapper">
                     <canvas id="mainChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══════════ 4-DAY FORECAST TABLE SECTION ══════════ -->
+        <div class="table-section">
+            <div class="section-header">
+                <h2 class="section-title">4-Day Forecast <span>Comparison Table</span></h2>
+            </div>
+            <div class="table-wrapper">
+                <div class="table-toolbar">
+                    <div>
+                        <h3>4-Day Forward Exchange-Rate Predictions</h3>
+                        <p style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 3px;">
+                            Click any column header to sort · All predictions in Indian Rupees (₹)
+                        </p>
+                    </div>
+                    <button class="btn-export" onclick="exportToCSV()">📥 Export Table (CSV)</button>
+                </div>
+                <div class="table-scroll">
+                    <table class="forecast-table" id="forecastTable">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable(0)">Currency ↕</th>
+                                <th onclick="sortTable(1)">Current Rate (₹) ↕</th>
+                                <th onclick="sortTable(2)">Day 1 (₹) ↕</th>
+                                <th onclick="sortTable(3)">Day 2 (₹) ↕</th>
+                                <th onclick="sortTable(4)">Day 3 (₹) ↕</th>
+                                <th onclick="sortTable(5)">Day 4 (₹) ↕</th>
+                                <th onclick="sortTable(6)">Trend ↕</th>
+                                <th onclick="sortTable(7)">Volatility ↕</th>
+                            </tr>
+                        </thead>
+                        <tbody id="forecastTableBody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -1915,6 +2063,9 @@
         // Render currency cards
         renderCurrencyCards(data);
 
+        // Render 4-Day Forecast Comparison Table
+        renderForecastTable(data);
+
         // Populate chart select
         populateChartSelect(data);
 
@@ -1979,13 +2130,33 @@
                 card.classList.add('active');
             };
 
-            // Forecast summary (4-Day forward prediction)
+            // Forecast predictions (Day 1 through Day 4)
             const preds = curr.forecasts || [];
             const day4Rate = preds[3]?.rate || curr.current_rate;
-            const day4ChangePct = preds[3]?.change_pct != null
-                ? preds[3].change_pct
-                : (((day4Rate - curr.current_rate) / curr.current_rate) * 100);
+            const day4ChangePct = preds[3]?.predicted_change_pct != null
+                ? preds[3].predicted_change_pct
+                : (preds[3]?.change_pct != null
+                    ? preds[3].change_pct
+                    : (((day4Rate - curr.current_rate) / curr.current_rate) * 100));
             const isForeUp = day4ChangePct >= 0;
+
+            // Generate 4-Day Forecast Pills
+            let forecastPillsHTML = '';
+            preds.forEach((f, idx) => {
+                const dayLabel = f.day_label ? f.day_label.split(',')[0].trim() : `Day ${idx + 1}`;
+                const chg = f.predicted_change_pct != null
+                    ? f.predicted_change_pct
+                    : (f.change_pct != null
+                        ? f.change_pct
+                        : (((f.rate - curr.current_rate) / curr.current_rate) * 100));
+                const isDayUp = chg >= 0;
+                forecastPillsHTML += `
+                    <div class="forecast-day-pill">
+                        <div class="pill-day">${dayLabel}</div>
+                        <div class="pill-rate">₹${formatRate(f.rate)}</div>
+                        <div class="pill-chg ${isDayUp ? 'up' : 'down'}">${isDayUp ? '+' : ''}${chg.toFixed(2)}%</div>
+                    </div>`;
+            });
 
             // Trend/Volatility badges
             const trendClass = curr.trend === 'bullish' ? 'badge-bullish'
@@ -2012,11 +2183,15 @@
                 </div>
                 <div class="card-rate" id="rate-${code}">0.0000</div>
                 <div class="card-rate-label">INR per 1 ${meta.symbol || ''}${code}</div>
-                <div class="card-forecast-summary">
-                    <div class="forecast-target-row">
-                        <span class="target-label">4-Day Target</span>
-                        <span class="target-rate">₹${formatRate(day4Rate)}</span>
-                        <span class="target-chg ${isForeUp ? 'up' : 'down'}">${isForeUp ? '▲ +' : '▼ '}${day4ChangePct.toFixed(2)}%</span>
+                <div class="card-forecast-section">
+                    <div class="card-forecast-title">
+                        <span>4-Day Predictions</span>
+                        <span style="color: ${isForeUp ? 'var(--positive)' : 'var(--negative)'}; font-weight: 700;">
+                            4D: ${isForeUp ? '+' : ''}${day4ChangePct.toFixed(2)}%
+                        </span>
+                    </div>
+                    <div class="card-forecast-grid">
+                        ${forecastPillsHTML}
                     </div>
                 </div>
                 <div class="card-badges">
@@ -2284,6 +2459,100 @@
         document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
         loadChart();
+    }
+
+    /* ── 4-Day Forecast Comparison Table ────────────────────────────────── */
+    let tableSortCol = 0;
+    let tableSortAsc = true;
+
+    function renderForecastTable(data) {
+        const tbody = document.getElementById('forecastTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        const forecasts = data.forecasts || {};
+        const entries = Object.entries(forecasts);
+
+        entries.forEach(([code, curr]) => {
+            const meta = curr.meta || {};
+            const preds = curr.forecasts || [];
+            const tr = document.createElement('tr');
+            tr.onclick = () => {
+                document.getElementById('chartCurrencySelect').value = code;
+                currentChartCurrency = code;
+                loadChart();
+                document.getElementById('chartCard').scrollIntoView({ behavior: 'smooth' });
+            };
+
+            const day1 = preds[0]?.rate != null ? `₹${formatRate(preds[0].rate)}` : '—';
+            const day2 = preds[1]?.rate != null ? `₹${formatRate(preds[1].rate)}` : '—';
+            const day3 = preds[2]?.rate != null ? `₹${formatRate(preds[2].rate)}` : '—';
+            const day4 = preds[3]?.rate != null ? `₹${formatRate(preds[3].rate)}` : '—';
+
+            const d1Chg = preds[0]?.predicted_change_pct != null
+                ? preds[0].predicted_change_pct
+                : (preds[0]?.change_pct != null ? preds[0].change_pct : 0);
+            const d4Chg = preds[3]?.predicted_change_pct != null
+                ? preds[3].predicted_change_pct
+                : (preds[3]?.change_pct != null
+                    ? preds[3].change_pct
+                    : (((preds[3]?.rate - curr.current_rate) / curr.current_rate) * 100));
+
+            const trendClass = curr.trend === 'bullish' ? 'badge-bullish'
+                              : curr.trend === 'bearish' ? 'badge-bearish' : 'badge-neutral';
+            const volClass = curr.volatility_label === 'Low' ? 'badge-vol-low'
+                           : curr.volatility_label === 'High' ? 'badge-vol-high' : 'badge-vol-medium';
+
+            tr.innerHTML = `
+                <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 1.1rem;">${meta.flag || ''}</span>
+                        <div>
+                            <strong style="color: #fff;">${code}</strong>
+                            <div style="font-size: 0.7rem; color: var(--text-tertiary);">${meta.name || ''}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="font-family: var(--font-mono); font-weight: 600; color: #fff;">₹${formatRate(curr.current_rate)}</td>
+                <td style="font-family: var(--font-mono);">${day1}</td>
+                <td style="font-family: var(--font-mono);">${day2}</td>
+                <td style="font-family: var(--font-mono);">${day3}</td>
+                <td style="font-family: var(--font-mono); font-weight: 700; color: var(--accent-gold);">${day4}</td>
+                <td><span class="badge ${trendClass}">${curr.trend || 'neutral'}</span></td>
+                <td><span class="badge ${volClass}">${curr.volatility_label || 'Low'}</span></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function sortTable(colIdx) {
+        const table = document.getElementById('forecastTable');
+        if (!table) return;
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        
+        if (tableSortCol === colIdx) {
+            tableSortAsc = !tableSortAsc;
+        } else {
+            tableSortCol = colIdx;
+            tableSortAsc = true;
+        }
+
+        rows.sort((a, b) => {
+            let valA = a.children[colIdx]?.innerText.trim().replace('₹', '').replace('%', '') || '';
+            let valB = b.children[colIdx]?.innerText.trim().replace('₹', '').replace('%', '') || '';
+
+            const numA = parseFloat(valA);
+            const numB = parseFloat(valB);
+
+            if (!isNaN(numA) && !isNaN(numB)) {
+                return tableSortAsc ? numA - numB : numB - numA;
+            }
+            return tableSortAsc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        });
+
+        tbody.innerHTML = '';
+        rows.forEach(r => tbody.appendChild(r));
     }
 
     /* ── CSV Export ────────────────────────────────────────────── */
